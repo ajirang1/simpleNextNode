@@ -11,10 +11,10 @@ app.get('/api', (req, res) => {
         response.json().then((data) => {
             if (data.success) {
                 res.json({rank: `${data.data.rank}`})
-                console.log(data.data.rank)
+                console.log(data.data.rank, username)
             } else {
                 res.json({rank: `${data.error.msg}`})
-                console.log(data.error.msg)
+                console.log(data.error.msg, username)
             }
             console.log(data)
         })
