@@ -99,7 +99,25 @@ app.get('/schoolinfo', (req, res) => {
                         console.log(ofcdcCode)
                         await getFoodData()
                         await getTimeline()
-                        await res.status(200).json({schoolName, foodData, timeData})
+
+                        let message;
+                        let newString = foodData.replace(/<br\s*\/?>/gi, '\n');
+
+                        const lessons = timeData
+                            .map((row, i) => row?.ITRT_CNTNT ? `${i + 1}.${row.ITRT_CNTNT}` : null)
+                            .filter(Boolean)
+                            .join('\n');
+
+                        message = `${newMonth}/${regulatedDay.getDate()}\n
+[시간표]
+${lessons}\n
+[급식]
+${newString}\n
+[기타]`;
+
+
+                        console.log(message)
+                        await res.status(200).json({schoolName, foodData, timeData, realMessage: message })
 
                     } else {
                         res.json({errmsg: data.schoolInfo[0].head[1].RESULT.MESSAGE + `반정보`})
