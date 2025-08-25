@@ -46,6 +46,15 @@ export default function Home() {
             })})
     }
 
+    async function handleCopyClick() {
+        try {
+            await navigator.clipboard.writeText(message)
+            console.log(message)
+        } catch (err) {
+            console.error(err)
+        }
+    }
+
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-200">
@@ -97,11 +106,19 @@ export default function Home() {
             message === 'loading' ? (
                 <Skeleton className="w-100 h-120"/>
             ) : (
-                <Textarea
-                    className="outline-5 bg-gray-100 w-100 h-120"
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                />
+                <div className="flex flex-row justify-center items-center">
+                    <Textarea
+                        className="outline-5 bg-gray-100 w-100 h-120"
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                    />
+
+                    <Button
+                    className="bg-black text-white w-30 h-60 ml-20"
+                    onClick={() => handleCopyClick()}>
+                        복사하기!
+                    </Button>
+                </div>
             )
         ) : null}
 

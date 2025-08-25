@@ -33,6 +33,7 @@ app.get('/schoolinfo', (req, res) => {
     let newMonth;
     let foodData;
     let timeData;
+    let dayName = ["월", "화", "수", "목", '금']
 
     console.log({schoolName, gradeNum, classNum})
 
@@ -110,12 +111,12 @@ app.get('/schoolinfo', (req, res) => {
                             .filter(Boolean)
                             .join('\n');
 
-                        message = `${newMonth}/${regulatedDay.getDate()}\n
+                        message = `${newMonth}/${regulatedDay.getDate()} (${dayName[regulatedDay.getDay() - 1]})\n
 [시간표]
 ${lessons}\n
 [급식]
 ${newString}\n
-[기타]
+[기타] - 아래 내용중 이상 있을 시 연락 주세요!
 ${customMessage}\n`;
 
 
