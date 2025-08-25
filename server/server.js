@@ -24,10 +24,11 @@ app.get('/api', (req, res) => {
 })
 
 app.get('/schoolinfo', (req, res) => {
-    const { schoolName, gradeNum, classNum } = req.query
+    const { schoolName, gradeNum, classNum, customMessage } = req.query
     let schoolCode;
     let ofcdcCode;
     let today = new Date();
+    today.setDate(today.getDate() + 1)
     let regulatedDay = today
     let newMonth;
     let foodData;
@@ -102,6 +103,7 @@ app.get('/schoolinfo', (req, res) => {
 
                         let message;
                         let newString = foodData.replace(/<br\s*\/?>/gi, '\n');
+                        console.log(customMessage)
 
                         const lessons = timeData
                             .map((row, i) => row?.ITRT_CNTNT ? `${i + 1}.${row.ITRT_CNTNT}` : null)
@@ -113,7 +115,8 @@ app.get('/schoolinfo', (req, res) => {
 ${lessons}\n
 [급식]
 ${newString}\n
-[기타]`;
+[기타]
+${customMessage}\n`;
 
 
                         console.log(message)

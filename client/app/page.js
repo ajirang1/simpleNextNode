@@ -14,6 +14,13 @@ export default function Home() {
     const [schoolName, setSchoolName] = useState('동패고등학교')
     const [gradeNum, setGradeNum] = useState(2)
     const [classNum, setClassNum] = useState(9)
+    const [customMessage, setCustomMessage] = useState('')
+
+    useEffect(() => {
+        if (localStorage.getItem('customMessage') !== null) {
+            setCustomMessage(localStorage.getItem('customMessage'))
+        }
+    }, []);
 
     function handleSubmit(username) {
             fetch(`http://localhost:8080/api?username=${username}`)
@@ -23,9 +30,11 @@ export default function Home() {
                 })})
     }
 
-    function handleSchoolSubmit(schoolName, gradeNum, classNum) {
+    function handleSchoolSubmit(schoolName, gradeNum, classNum, customMessage) {
+        localStorage.setItem("customMessage", customMessage)
         setMessage('loading')
-        fetch(`http://localhost:8080/schoolinfo?schoolName=${schoolName}&gradeNum=${gradeNum}&classNum=${classNum}`)
+        const qs = new URLSearchParams({ customMessage }).toString()
+        fetch(`http://localhost:8080/schoolinfo?schoolName=${schoolName}&gradeNum=${gradeNum}&classNum=${classNum}&${qs}`)
             .then((response) => {response.json().then((data) => {
                 console.log(data)
                 if (data.errmsg) {
@@ -41,9 +50,9 @@ export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-200">
         <div>
-            <div className="flex flex-row w-70 mb-4 gap-2">
+            <div className="flex flex-row w-200 mb-4 gap-2">
                 <Input
-                    className="bg-white w-200"
+                    className="bg-white w-140"
                     placeholder="학교 이름"
                     type="text"
                     name="schoolName"
@@ -51,7 +60,7 @@ export default function Home() {
                     value={schoolName}
                 />
                 <Input
-                    className="bg-white"
+                    className="bg-white w-30"
                     placeholder="학년"
                     type="text"
                     name="gradeNum"
@@ -59,7 +68,7 @@ export default function Home() {
                     value={gradeNum}
                 />
                 <Input
-                    className="bg-white"
+                    className="bg-white w-30"
                     placeholder="반"
                     type="text"
                     name="classNum"
@@ -67,9 +76,17 @@ export default function Home() {
                     value={classNum}
                 />
 
+                <Textarea
+                    className="bg-white w-300 min-h-20"
+                    placeholder="추가 알림 사항"
+                    name="customMessage"
+                    onChange={(e) => setCustomMessage(e.target.value)}
+                    value={customMessage}
+                />
+
                 <Button
                     className="mb-5"
-                    onClick={() => handleSchoolSubmit(schoolName, gradeNum, classNum)}>제출!
+                    onClick={() => handleSchoolSubmit(schoolName, gradeNum, classNum, customMessage)}>제출!
                 </Button>
 
             </div>
