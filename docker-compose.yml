@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  server:
+    build: ./server
+    environment:
+      - PORT=8080
+      - NEIS_KEY=${NEIS_KEY}
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+  client:
+    build: ./client
+    environment:
+      - NODE_ENV=production
+      # Make sure your frontend reads this (e.g., fetch(`${process.env.NEXT_PUBLIC_API_URL}/api`))
+      - NEXT_PUBLIC_API_URL=http://server:8080
+    ports:
+      - "3000:3000"
+    depends_on:
+      - server
+    restart: unless-stopped

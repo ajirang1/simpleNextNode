@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import {Skeleton} from "@/components/ui/skeleton";
 import {Text} from "lucide-react";
+require("dotenv").config();
 
 export default function Home() {
 
@@ -34,7 +35,7 @@ export default function Home() {
         localStorage.setItem("customMessage", customMessage)
         setMessage('loading')
         const qs = new URLSearchParams({ customMessage }).toString()
-        fetch(`http://localhost:8080/schoolinfo?schoolName=${schoolName}&gradeNum=${gradeNum}&classNum=${classNum}&${qs}`)
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/schoolinfo?schoolName=${schoolName}&gradeNum=${gradeNum}&classNum=${classNum}&${qs}`)
             .then((response) => {response.json().then((data) => {
                 console.log(data)
                 if (data.errmsg) {
