@@ -41,9 +41,9 @@ export default function Home() {
 
     function handleSchoolSubmit(schoolName, gradeNum, classNum, customMessage) {
         localStorage.setItem("customMessage", customMessage)
-	localStorage.setItem("schoolName", schoolName)
-	localStorage.setItem("classNum", classNum)
-	localStorage.setItem("gradeNum", gradeNum)
+		localStorage.setItem("schoolName", schoolName)
+		localStorage.setItem("classNum", classNum)
+		localStorage.setItem("gradeNum", gradeNum)
         setMessage('loading')
         const qs = new URLSearchParams({ customMessage }).toString()
         fetch(`/schoolinfo?schoolName=${schoolName}&gradeNum=${gradeNum}&classNum=${classNum}&${qs}`)
