@@ -31,6 +31,7 @@ app.get('/schoolinfo', (req, res) => {
     today.setDate(today.getDate() + 1)
     let regulatedDay = today
     let newMonth;
+    let newDate;
     let foodData;
     let timeData;
     let dayName = ["월", "화", "수", "목", '금']
@@ -50,8 +51,13 @@ app.get('/schoolinfo', (req, res) => {
         console.log(newMonth)
     }
 
-    console.log(`${regulatedDay.getFullYear()}${newMonth}${regulatedDay.getDate()}`)
-    const finDateYMD = `${regulatedDay.getFullYear()}${newMonth}${regulatedDay.getDate()}`
+    if (regulatedDay.getDate().toString().length === 1) {
+        newDate = `0` + `${(regulatedDay.getDate()).toString()}`
+        console.log(newDate)
+    }
+
+    console.log(`${regulatedDay.getFullYear()}${newMonth}${newDate}`)
+    const finDateYMD = `${regulatedDay.getFullYear()}${newMonth}${newDate}`
 
     async function getFoodData() {
         await fetch(`https://open.neis.go.kr/hub/mealServiceDietInfo?KEY=${process.env.NEIS_KEY}&Type=json&pIndex=1&pSize=1&ATPT_OFCDC_SC_CODE=${ofcdcCode}&SD_SCHUL_CODE=${schoolCode}&MLSV_YMD=${finDateYMD}`).then((response) => {
@@ -111,7 +117,7 @@ app.get('/schoolinfo', (req, res) => {
                             .filter(Boolean)
                             .join('\n');
 
-                        message = `${newMonth}/${regulatedDay.getDate()} (${dayName[regulatedDay.getDay() - 1]})\n
+                        message = `${newMonth}/${newDate} (${dayName[regulatedDay.getDay() - 1]})\n
 [시간표]
 ${lessons}\n
 [급식]
