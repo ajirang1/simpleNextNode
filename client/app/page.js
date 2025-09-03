@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import {Skeleton} from "@/components/ui/skeleton";
 import {Text} from "lucide-react";
-require("dotenv").config();
 
 export default function Home() {
 
@@ -21,6 +20,15 @@ export default function Home() {
         if (localStorage.getItem('customMessage') !== null) {
             setCustomMessage(localStorage.getItem('customMessage'))
         }
+	if (localStorage.getItem('schoolName') !== null) {
+	    setSchoolName(localStorage.getItem('schoolName'))
+	}
+	if (localStorage.getItem('gradeNum') !== null) {
+	    setGradeNum(localStorage.getItem('gradeNum'))
+	}
+	if (localStorage.getItem('classNum') !== null ) {
+	    setClassNum(localStorage.getItem('classNum'))
+	}
     }, []);
 
     function handleSubmit(username) {
@@ -33,9 +41,12 @@ export default function Home() {
 
     function handleSchoolSubmit(schoolName, gradeNum, classNum, customMessage) {
         localStorage.setItem("customMessage", customMessage)
+	localStorage.setItem("schoolName", schoolName)
+	localStorage.setItem("classNum", classNum)
+	localStorage.setItem("gradeNum", gradeNum)
         setMessage('loading')
         const qs = new URLSearchParams({ customMessage }).toString()
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/schoolinfo?schoolName=${schoolName}&gradeNum=${gradeNum}&classNum=${classNum}&${qs}`)
+        fetch(`/schoolinfo?schoolName=${schoolName}&gradeNum=${gradeNum}&classNum=${classNum}&${qs}`)
             .then((response) => {response.json().then((data) => {
                 console.log(data)
                 if (data.errmsg) {
